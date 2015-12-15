@@ -12,14 +12,13 @@
         android:hint="@string/search"
         android:drawableLeft="@drawable/search_icon" />
 
-    <ListView
-        android:id="@+id/country_picker_listview"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/country_picker_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_marginBottom="10dp" >
-    </ListView>
+        android:layout_marginBottom="10dp" />
 
 </LinearLayout>
