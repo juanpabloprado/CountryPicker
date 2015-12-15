@@ -16,13 +16,6 @@ import java.util.Locale;
 public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.CountryHolder>
     implements Filterable {
 
-  /**
-   * Inform the client which country has been selected
-   */
-  public interface CountryPickerListener {
-    void onSelectCountry(String name, String code);
-  }
-
   private CountryPicker mCountryPicker;
   private LayoutInflater mInflater;
   private CountryPickerListener mListener;

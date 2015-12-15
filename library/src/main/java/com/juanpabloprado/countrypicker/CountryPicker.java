@@ -18,14 +18,13 @@ import java.util.Locale;
 
 public class CountryPicker extends DialogFragment implements Comparator<Country> {
   private CountryAdapter mAdapter;
-  private CountryAdapter.CountryPickerListener mListener;
+  private CountryPickerListener mListener;
 
   static List<Country> countries = getAllCountries();
 
   private static final String DIALOG_TITLE_KEY = "dialogTitle";
 
-  public static CountryPicker getInstance(String dialogTitle,
-      CountryAdapter.CountryPickerListener listener) {
+  public static CountryPicker getInstance(String dialogTitle, CountryPickerListener listener) {
     CountryPicker picker = getInstance(listener);
     Bundle bundle = new Bundle();
     bundle.putString(DIALOG_TITLE_KEY, dialogTitle);
@@ -33,7 +32,7 @@ public class CountryPicker extends DialogFragment implements Comparator<Country>
     return picker;
   }
 
-  public static CountryPicker getInstance(CountryAdapter.CountryPickerListener listener) {
+  public static CountryPicker getInstance(CountryPickerListener listener) {
     CountryPicker picker = new CountryPicker();
     picker.mListener = listener;
     return picker;
@@ -59,7 +58,6 @@ public class CountryPicker extends DialogFragment implements Comparator<Country>
       Bundle savedInstanceState) {
     View view = inflater.inflate(R.layout.country_picker, container, false);
 
-
     // Set dialog title if show as dialog
     Bundle args = getArguments();
     if (args != null) {
@@ -72,8 +70,7 @@ public class CountryPicker extends DialogFragment implements Comparator<Country>
     }
 
     EditText searchEditText = (EditText) view.findViewById(R.id.country_picker_search);
-    RecyclerView recyclerView =
-        (RecyclerView) view.findViewById(R.id.country_picker_recycler_view);
+    RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.country_picker_recycler_view);
 
     // Sort the countries based on country name
     Collections.sort(countries, this);
