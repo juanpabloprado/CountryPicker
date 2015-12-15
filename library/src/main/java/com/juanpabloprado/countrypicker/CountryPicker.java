@@ -17,9 +17,10 @@ import java.util.List;
 import java.util.Locale;
 
 public class CountryPicker extends DialogFragment implements Comparator<Country> {
-  private EditText mSearchEditText;
   private CountryAdapter mAdapter;
   private CountryAdapter.CountryPickerListener mListener;
+
+  static List<Country> countries = getAllCountries();
 
   private static final String DIALOG_TITLE_KEY = "dialogTitle";
 
@@ -38,7 +39,7 @@ public class CountryPicker extends DialogFragment implements Comparator<Country>
     return picker;
   }
 
-  private List<Country> getAllCountries() {
+  private static List<Country> getAllCountries() {
     List<Country> countries = new ArrayList<Country>();
 
     for (String countryCode : Locale.getISOCountries()) {
@@ -47,9 +48,6 @@ public class CountryPicker extends DialogFragment implements Comparator<Country>
       country.name = new Locale("", countryCode).getDisplayCountry();
       countries.add(country);
     }
-
-    // Sort the all countries list based on country name
-    Collections.sort(countries, this);
 
     return countries;
   }
@@ -73,17 +71,21 @@ public class CountryPicker extends DialogFragment implements Comparator<Country>
       getDialog().getWindow().setLayout(width, height);
     }
 
-    mSearchEditText = (EditText) view.findViewById(R.id.country_picker_search);
+    EditText searchEditText = (EditText) view.findViewById(R.id.country_picker_search);
     RecyclerView recyclerView =
         (RecyclerView) view.findViewById(R.id.country_picker_recycler_view);
 
+    // Sort the countries based on country name
+    Collections.sort(countries, this);
+
     // setup recyclerView
-    recyclerView.setLayoutManager(new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL));
-    mAdapter = new CountryAdapter(this, getAllCountries(), mListener);
+    recyclerView.setLayoutManager(
+        new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL));
+    mAdapter = new CountryAdapter(this, mListener);
     recyclerView.setAdapter(mAdapter);
 
     // Search for which countries matched user query
-    mSearchEditText.addTextChangedListener(new TextWatcher() {
+    searchEditText.addTextChangedListener(new TextWatcher() {
 
       @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
       }
@@ -100,7 +102,7 @@ public class CountryPicker extends DialogFragment implements Comparator<Country>
   }
 
   /**
-   * Support sorting the countries list
+   * Support sorting the countries
    */
   @Override public int compare(Country lhs, Country rhs) {
     return lhs.name.compareTo(rhs.name);

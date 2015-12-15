@@ -26,15 +26,13 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.CountryH
   private CountryPicker mCountryPicker;
   private LayoutInflater mInflater;
   private CountryPickerListener mListener;
-  private List<Country> mCountries;
   private List<Country> mFilteredCountries;
 
-  public CountryAdapter(CountryPicker countryPicker, List<Country> countries, CountryPickerListener listener) {
+  public CountryAdapter(CountryPicker countryPicker, CountryPickerListener listener) {
     mCountryPicker = countryPicker;
     mInflater = LayoutInflater.from(countryPicker.getActivity());
     mListener = listener;
-    mCountries = countries;
-    mFilteredCountries = new ArrayList<Country>(mCountries);
+    mFilteredCountries = new ArrayList<Country>(CountryPicker.countries);
   }
 
   @Override public CountryHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -88,7 +86,7 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.CountryH
         if (constraint != null) {
 
           List<Country> filteredCountries = new ArrayList<Country>();
-          for (Country country : mCountries) {
+          for (Country country : CountryPicker.countries) {
             if (country.name.toLowerCase(Locale.ENGLISH)
                 .contains(((String) constraint).toLowerCase())) {
               filteredCountries.add(country);
