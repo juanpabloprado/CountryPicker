@@ -5,12 +5,16 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.CountryHolder> {
+public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.CountryHolder>
+    implements Filterable {
 
   /**
    * Inform the client which country has been selected
@@ -23,12 +27,14 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.CountryH
   private LayoutInflater mInflater;
   private CountryPickerListener mListener;
   private List<Country> mCountries;
+  private List<Country> mFilteredCountries;
 
-  public CountryAdapter(CountryPicker countryPicker, List<Country> countries) {
+  public CountryAdapter(CountryPicker countryPicker, List<Country> countries, CountryPickerListener listener) {
     mCountryPicker = countryPicker;
     mInflater = LayoutInflater.from(countryPicker.getActivity());
-    mListener = countryPicker.mListener;
+    mListener = listener;
     mCountries = countries;
+    mFilteredCountries = new ArrayList<Country>(mCountries);
   }
 
   @Override public CountryHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -36,16 +42,17 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.CountryH
   }
 
   @Override public void onBindViewHolder(CountryHolder holder, int position) {
-    final Country country = mCountries.get(position);
+    final Country country = mFilteredCountries.get(position);
 
     holder.textView.setText(country.name);
 
     String drawableName = "flag_" + country.code.toLowerCase(Locale.ENGLISH);
     int drawableId = mCountryPicker.getResources()
         .getIdentifier(drawableName, "drawable", mCountryPicker.getActivity().getPackageName());
-    holder.imageView.setImageDrawable(
-        ContextCompat.getDrawable(mCountryPicker.getActivity(), drawableId));
-
+    if (drawableId != 0) {
+      holder.imageView.setImageDrawable(
+          ContextCompat.getDrawable(mCountryPicker.getActivity(), drawableId));
+    }
     holder.itemView.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View v) {
         mListener.onSelectCountry(country.name, country.code);
@@ -53,12 +60,8 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.CountryH
     });
   }
 
-  @Override public long getItemId(int arg0) {
-    return 0;
-  }
-
   @Override public int getItemCount() {
-    return mCountries.size();
+    return mFilteredCountries.size();
   }
 
   public class CountryHolder extends RecyclerView.ViewHolder {
@@ -73,8 +76,36 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.CountryH
   }
 
   public void refill(List<Country> countries) {
-    mCountries.clear();
-    mCountries.addAll(countries);
+    mFilteredCountries.clear();
+    mFilteredCountries.addAll(countries);
     notifyDataSetChanged();
+  }
+
+  @Override public Filter getFilter() {
+    return new Filter() {
+      @Override protected FilterResults performFiltering(CharSequence constraint) {
+        FilterResults results = new FilterResults();
+        if (constraint != null) {
+
+          List<Country> filteredCountries = new ArrayList<Country>();
+          for (Country country : mCountries) {
+            if (country.name.toLowerCase(Locale.ENGLISH)
+                .contains(((String) constraint).toLowerCase())) {
+              filteredCountries.add(country);
+            }
+          }
+          results.values = filteredCountries;
+          results.count = filteredCountries.size();
+        }
+        return results;
+      }
+
+      @SuppressWarnings("unchecked") @Override
+      protected void publishResults(CharSequence constraint, FilterResults results) {
+        if (results != null) {
+          refill((List<Country>) results.values);
+        }
+      }
+    };
   }
 }

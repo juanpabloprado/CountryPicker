@@ -3,6 +3,7 @@ package com.juanpabloprado.countrypicker;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -18,23 +19,23 @@ import java.util.Locale;
 public class CountryPicker extends DialogFragment implements Comparator<Country> {
   private EditText mSearchEditText;
   private CountryAdapter mAdapter;
-  protected List<Country> mCountries;
-  protected CountryAdapter.CountryPickerListener mListener;
+  private CountryAdapter.CountryPickerListener mListener;
 
   private static final String DIALOG_TITLE_KEY = "dialogTitle";
 
   public static CountryPicker getInstance(String dialogTitle,
       CountryAdapter.CountryPickerListener listener) {
-    CountryPicker picker = new CountryPicker();
+    CountryPicker picker = getInstance(listener);
     Bundle bundle = new Bundle();
     bundle.putString(DIALOG_TITLE_KEY, dialogTitle);
     picker.setArguments(bundle);
-    picker.mListener = listener;
     return picker;
   }
 
-  public EditText getSearchEditText() {
-    return mSearchEditText;
+  public static CountryPicker getInstance(CountryAdapter.CountryPickerListener listener) {
+    CountryPicker picker = new CountryPicker();
+    picker.mListener = listener;
+    return picker;
   }
 
   private List<Country> getAllCountries() {
@@ -58,11 +59,8 @@ public class CountryPicker extends DialogFragment implements Comparator<Country>
    */
   @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
-    // Inflate view
     View view = inflater.inflate(R.layout.country_picker, container, false);
 
-    // Get countries from the json
-    mCountries = getAllCountries();
 
     // Set dialog title if show as dialog
     Bundle args = getArguments();
@@ -76,11 +74,13 @@ public class CountryPicker extends DialogFragment implements Comparator<Country>
     }
 
     mSearchEditText = (EditText) view.findViewById(R.id.country_picker_search);
-    RecyclerView countryListView =
+    RecyclerView recyclerView =
         (RecyclerView) view.findViewById(R.id.country_picker_recycler_view);
 
-    mAdapter = new CountryAdapter(this, mCountries);
-    countryListView.setAdapter(mAdapter);
+    // setup recyclerView
+    recyclerView.setLayoutManager(new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL));
+    mAdapter = new CountryAdapter(this, getAllCountries(), mListener);
+    recyclerView.setAdapter(mAdapter);
 
     // Search for which countries matched user query
     mSearchEditText.addTextChangedListener(new TextWatcher() {
@@ -92,22 +92,11 @@ public class CountryPicker extends DialogFragment implements Comparator<Country>
       }
 
       @Override public void afterTextChanged(Editable s) {
-        search(s.toString());
+        mAdapter.getFilter().filter(s);
       }
     });
 
     return view;
-  }
-
-  private void search(String text) {
-
-    ArrayList<Country> selectedCountries = new ArrayList<Country>();
-    for (Country country : mCountries) {
-      if (country.name.toLowerCase(Locale.ENGLISH).contains(text.toLowerCase())) {
-        selectedCountries.add(country);
-      }
-    }
-    mAdapter.refill(selectedCountries);
   }
 
   /**
