@@ -2,6 +2,20 @@ CountryPicker
 =============
 CountryPicker is an Android library created to show a custom fragment which allows to choose a country.
 
+Installation
+------------
+
+Use jitpack
+```groovy
+repositories {
+   maven { url "https://jitpack.io" }
+}
+
+dependencies {
+   compile 'com.github.juanpabloprado:CountryPicker:master-SNAPSHOT'
+}
+```
+
 ## How to use
 
 To embed CountryPicker in your own activity:
