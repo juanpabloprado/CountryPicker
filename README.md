@@ -2,6 +2,10 @@ CountryPicker
 =============
 CountryPicker is an Android library created to show a custom fragment which allows to choose a country.
 
+Screenshots
+-----------
+![Demo Screenshot][1]
+
 Installation
 ------------
 
@@ -59,3 +63,5 @@ License
     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
     See the License for the specific language governing permissions and
     limitations under the License.
+
+[1]: ./art/device-2015-12-16-163943.png
