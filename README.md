@@ -5,14 +5,14 @@ CountryPicker is an Android library created to show a custom fragment which allo
 Installation
 ------------
 
-Use jitpack
+Use bintray
 ```groovy
 repositories {
-   maven { url "https://jitpack.io" }
+   maven { url "http://dl.bintray.com/juanpablo/maven" }
 }
 
 dependencies {
-   compile 'com.github.juanpabloprado:CountryPicker:master-SNAPSHOT'
+   compile 'com.juanpabloprado:countrypicker:1.0.1'
 }
 ```
 
