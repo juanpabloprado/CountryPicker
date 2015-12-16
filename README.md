@@ -64,4 +64,4 @@ License
     See the License for the specific language governing permissions and
     limitations under the License.
 
-[1]: ./art/device-2015-12-16-163943.png
+[1]: ./art/screenshot.png
