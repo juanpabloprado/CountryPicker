@@ -9,15 +9,27 @@ Screenshots
 Installation
 ------------
 
-Use bintray
+Add CountryPicker dependency to your build.gradle
+
 ```groovy
-repositories {
-   maven { url "http://dl.bintray.com/juanpablo/maven" }
+
+dependencies{
+    compile 'com.juanpabloprado:countrypicker:1.0.1'
 }
 
-dependencies {
-   compile 'com.juanpabloprado:countrypicker:1.0.1'
-}
+```
+
+Or add CountryPicker as a new dependency inside your pom.xml
+
+```xml
+
+<dependency>
+    <groupId>com.juanpabloprado</groupId>
+    <artifactId>countrypicker</artifactId>
+    <version>1.0.1</version>
+    <type>aar</type>
+</dependency>
+
 ```
 
 ## How to use
