@@ -47,6 +47,17 @@ getSupportFragmentManager().beginTransaction()
         .commit();
 ```
 
+To show CountryPicker as a dialog:
+
+```java
+CountryPicker picker = CountryPicker.getInstance("Select Country", new CountryPickerListener() {
+  @Override public void onSelectCountry(String name, String code) {
+    Toast.makeText(getActivity(), "Name: " + name, Toast.LENGTH_SHORT).show();
+  }
+});
+picker.show(getFragmentManager(), "CountryPicker");
+```
+
 Developed By
 ------------
 
