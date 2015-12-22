@@ -2,8 +2,9 @@ package com.juanpabloprado.countrypicker;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
-public class Country implements Parcelable {
+public class Country implements Parcelable, Comparable<Country> {
   public String code;
   public String name;
 
@@ -28,4 +29,8 @@ public class Country implements Parcelable {
       return new Country[size];
     }
   };
+
+  @Override public int compareTo(@NonNull Country another) {
+    return name.compareTo(another.name);
+  }
 }

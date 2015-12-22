@@ -12,11 +12,10 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 
-public class CountryPicker extends DialogFragment implements Comparator<Country> {
+public class CountryPicker extends DialogFragment {
   private CountryAdapter mAdapter;
   private CountryPickerListener mListener;
 
@@ -73,7 +72,7 @@ public class CountryPicker extends DialogFragment implements Comparator<Country>
     RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.country_picker_recycler_view);
 
     // Sort the countries based on country name
-    Collections.sort(countries, this);
+    Collections.sort(countries);
 
     // setup recyclerView
     recyclerView.setLayoutManager(
@@ -98,10 +97,4 @@ public class CountryPicker extends DialogFragment implements Comparator<Country>
     return view;
   }
 
-  /**
-   * Support sorting the countries
-   */
-  @Override public int compare(Country lhs, Country rhs) {
-    return lhs.name.compareTo(rhs.name);
-  }
 }
