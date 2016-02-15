@@ -14,7 +14,7 @@ Add CountryPicker dependency to your build.gradle
 ```groovy
 
 dependencies {
-  compile 'com.juanpabloprado:countrypicker:1.0.1'
+  compile 'com.juanpabloprado:countrypicker:1.1.0'
 }
 
 ```
@@ -26,7 +26,7 @@ Or add CountryPicker as a new dependency inside your pom.xml
 <dependency>
   <groupId>com.juanpabloprado</groupId>
   <artifactId>countrypicker</artifactId>
-  <version>1.0.1</version>
+  <version>1.1.0</version>
   <type>aar</type>
 </dependency>
 

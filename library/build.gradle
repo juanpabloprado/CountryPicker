@@ -29,7 +29,7 @@ publish {
   userOrg = 'juanpablo'
   groupId = 'com.juanpabloprado'
   artifactId = 'countrypicker'
-  version = '1.0.1'
+  version = '1.1.0'
   description = 'CountryPicker is an Android library created to show a custom fragment which allows to choose a country.'
   website = 'https://github.com/juanpabloprado/CountryPicker'
   issueTracker = "https://github.com/juanpabloprado/CountryPicker/issues"
