@@ -1,11 +1,13 @@
 package com.juanpabloprado.countrypicker;
 
+
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.inputmethod.InputMethodManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -109,6 +111,13 @@ public class CountryPicker extends DialogFragment {
         new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL));
     mAdapter = new CountryAdapter(this, mListener);
     recyclerView.setAdapter(mAdapter);
+    recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+      @Override
+      public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+          super.onScrollStateChanged(recyclerView, newState);
+          hideKeyboard();
+      }
+    });
 
     // Search for which countries matched user query
     searchEditText.addTextChangedListener(new TextWatcher() {
@@ -125,5 +134,30 @@ public class CountryPicker extends DialogFragment {
     });
 
     return view;
+  }
+  
+  /**
+  * Method to hide keyboard if it's open
+  */
+  public void hideKeyboard() {
+    try {
+      Activity activity = getActivity();
+      if (activity == null) {
+        return;
+      }
+      InputMethodManager input
+            = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+      if (input == null) {
+        return;
+      }
+      View currentFocus = activity.getCurrentFocus();
+      if (currentFocus == null || currentFocus.getWindowToken() == null) {
+        return;
+      }
+
+      input.hideSoftInputFromWindow(currentFocus.getWindowToken(), 0);
+    } catch (Exception e) {
+        // ignoring any exceptions
+    }
   }
 }
