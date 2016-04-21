@@ -1,5 +1,6 @@
 package com.juanpabloprado.countrypicker;
 
+import android.os.Build;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,12 +10,16 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.regex.Pattern;
 
 public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.CountryHolder>
     implements Filterable {
+
+  private static final Pattern ACCENTS_PATTERN = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
 
   private CountryPicker mCountryPicker;
   private LayoutInflater mInflater;
@@ -80,8 +85,8 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.CountryH
 
           List<Country> filteredCountries = new ArrayList<Country>();
           for (Country country : CountryPicker.countries) {
-            if (country.name.toLowerCase(Locale.ENGLISH)
-                .contains(((String) constraint).toLowerCase())) {
+
+            if (containsIgnoreCaseAndAccents(country.name, (String) constraint)) {
               filteredCountries.add(country);
             }
           }
@@ -98,5 +103,17 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.CountryH
         }
       }
     };
+  }
+
+  private boolean containsIgnoreCaseAndAccents(String name, String constraint) {
+    return removeAccents(name).toLowerCase().contains(removeAccents(constraint).toLowerCase());
+  }
+
+  private String removeAccents(String string) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
+      return ACCENTS_PATTERN.matcher(Normalizer.normalize(string, Normalizer.Form.NFD)).replaceAll("");
+    } else {
+      return string;
+    }
   }
 }
